@@ -858,3 +858,6 @@ end
 
 #13496
 @deprecate A_ldiv_B!(A::SparseMatrixCSC, B::StridedVecOrMat) A_ldiv_B!(factorize(A), B)
+
+@deprecate chol(A::Union{Number,AbstractMatrix}, ::Type{Val{:U}}) chol(A)
+@deprecate chol(A::Union{Number,AbstractMatrix}, ::Type{Val{:L}}) ctranspose(chol(A))
