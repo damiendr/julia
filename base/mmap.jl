@@ -123,10 +123,10 @@ function mmap{T,N}(io::IO,
         name, readonly, create = settings(io)
         szfile = convert(Csize_t, len + offset)
         readonly && szfile > filesize(io) && throw(ArgumentError("unable to increase file size to $szfile due to read-only permissions"))
-        handle = create ? ccall(:CreateFileMappingW, stdcall, Ptr{Void}, (Cptrdiff_t, Ptr{Void}, Cint, Cint, Cint, Cwstring),
-                                file_desc, C_NULL, readonly ? PAGE_READONLY : PAGE_READWRITE, szfile >> 32, szfile & typemax(UInt32), name) :
-                          ccall(:OpenFileMappingW, stdcall, Ptr{Void}, (Cint, Cint, Cwstring),
-                            readonly ? FILE_MAP_READ : FILE_MAP_WRITE, true, name)
+        handle = create ? ccall(:CreateFileMappingW, stdcall, Ptr{Void}, (Cptrdiff_t, Ptr{Void}, Cuint, Cuint, Cuint, Cwstring),
+                        file_desc, C_NULL, readonly ? PAGE_READONLY : PAGE_READWRITE, szfile >> 32, szfile & typemax(UInt32), name) :
+                  ccall(:OpenFileMappingW, stdcall, Ptr{Void}, (Cuint, Cuint, Cwstring),
+                    readonly ? FILE_MAP_READ : FILE_MAP_WRITE, true, name)
         handle == C_NULL && error("could not create file mapping: $(Libc.FormatMessage())")
         ptr = ccall(:MapViewOfFile, stdcall, Ptr{Void}, (Ptr{Void}, Cint, Cint, Cint, Csize_t),
                     handle, readonly ? FILE_MAP_READ : FILE_MAP_WRITE, offset_page >> 32, offset_page & typemax(UInt32), (offset - offset_page) + len)
