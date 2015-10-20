@@ -546,7 +546,7 @@ Normalize the vector `v` in-place with respect to the `p`-norm.
 
 # See also
 
-`normalize`
+`normalize`, `qr`
 
 """
 function normalize!(v::AbstractVector, p::Real=2)
@@ -573,7 +573,7 @@ Normalize the vector `v` with respect to the `p`-norm.
 
 # See also
 
-`normalize!`
+`normalize!`, `qr`
 """
 function normalize(v::AbstractVector, p::Real=2)
     nrm = norm(v, p)
