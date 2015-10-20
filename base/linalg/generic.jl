@@ -529,3 +529,53 @@ function isapprox{T<:Number,S<:Number}(x::AbstractArray{T}, y::AbstractArray{S};
     d = norm(x - y)
     return isfinite(d) ? d <= atol + rtol*max(norm(x), norm(y)) : x == y
 end
+
+"""
+    normalize!(v, [p=2])
+
+Normalize the vector `v` in-place with respect to the `p`-norm.
+
+# Inputs
+
+- `v::AbstractVector` - vector to be normalized
+- `p::Real` - The `p`-norm to normalize with respect to. Default: 2
+
+# Output
+
+- `v` - A unit vector being the input vector, rescaled to have norm 1. The input vector is modified in-place.
+
+# See also
+
+`normalize`
+
+"""
+function normalize!(v::AbstractVector, p::Real=2)
+    nrm = norm(v, p)
+    for i in eachindex(v)
+        v[i] /= nrm
+    end
+    v
+end
+
+"""
+    normalize(v, [p=2])
+
+Normalize the vector `v` with respect to the `p`-norm.
+
+# Inputs
+
+- `v::AbstractVector` - vector to be normalized
+- `p::Real` - The `p`-norm to normalize with respect to. Default: 2
+
+# Output
+
+- `v` - A unit vector being a copy of the input vector, scaled to have norm 1
+
+# See also
+
+`normalize!`
+"""
+function normalize(v::AbstractVector, p::Real=2)
+    nrm = norm(v, p)
+    v/nrm
+end
